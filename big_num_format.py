@@ -52,7 +52,7 @@ def get_name(magnitude_over_3, shorten=False):
             tens_flags.append(tens_append)
 
     magnitude_units_digit = (magnitude_over_3 - 1) % 10
-    magnitude_tens_digit = math.floor(magnitude_over_3 / 10)
+    magnitude_tens_digit = math.floor((magnitude_over_3-1) / 10)
 
     units_name = ""
     tens_name = ""
