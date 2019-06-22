@@ -1,0 +1,4 @@
+thousand
+million,billion,trillion,quadrillion,quintillion,sextillion,septillion,octillion,nonillion
+un,duo,tre_s,quattuor,quinqua,se_sx,septe_mn,octo,nove_mn
+decillion_n,vigintillion_ms,trigintillion_ns,quadragintillion_ns,quinquagintillion_ns,sexagintillion_n,septuagintillion_n,octogintillion_mx,nonagintillion

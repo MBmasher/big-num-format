@@ -1,0 +1,4 @@
+k
+M,B,T,q,Q,s,S,O,N
+U,D,T,q,Q,s,S,O,N
+De,Vg,Tg,qg,Qg,sg,Sg,Og,Ng
