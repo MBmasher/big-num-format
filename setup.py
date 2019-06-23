@@ -5,7 +5,7 @@ with open("README.md", "r") as fh:
 
 setuptools.setup(
     name="big-num-format",
-    version="0.1.4",
+    version="0.1.5",
     scripts=[],
     author="MBmasher",
     author_email="mbmasher@gmail.com",
