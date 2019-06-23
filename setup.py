@@ -5,7 +5,7 @@ with open("README.md", "r") as fh:
 
 setuptools.setup(
     name="big-num-format",
-    version="0.1.1",
+    version="0.1.2",
     scripts=[],
     author="MBmasher",
     author_email="mbmasher@gmail.com",
@@ -13,7 +13,9 @@ setuptools.setup(
     long_description=long_description,
     long_description_content_type="text/markdown",
     url="https://github.com/MBmasher/big-num-format",
-    packages=setuptools.find_packages(),
+    packages=["big-num-format"],
+    package_dir={"big-num-format":"big-num-format"},
+    package_data={"big-num-format":["*.txt"]},
     classifiers=[
         "Programming Language :: Python :: 3",
         "Operating System :: OS Independent",
