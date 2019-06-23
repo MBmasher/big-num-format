@@ -93,12 +93,13 @@ def format_num(number, shorten=False, precision=0):
         raise ValueError("Number is bigger than or equal to 1e303.")
 
     negative = number < 0
-    magnitude = get_magnitude(number)
-    magnitude_over_3 = math.floor(magnitude / 3)
 
-    number_string = "{:0f}".format(number)
+    number_string = "".join(("{:.0f}".format(number)).split("."))
     numbers_list = []
 
+    magnitude = len(number_string)-1
+    magnitude_over_3 = math.floor(magnitude / 3)
+    
     min_index = 0
     max_index = (magnitude + 1) % 3
 
