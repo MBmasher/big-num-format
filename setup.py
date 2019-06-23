@@ -13,9 +13,12 @@ setuptools.setup(
     long_description=long_description,
     long_description_content_type="text/markdown",
     url="https://github.com/MBmasher/big-num-format",
-    packages=["big-num-format"],
-    package_dir={"big-num-format":"big-num-format"},
-    package_data={"big-num-format":["*.txt"]},
+    packages=["big_num_format"],
+    package_dir={"big_num_format":"big_num_format"},
+    package_data={
+        "":["README.md"],
+        "big_num_format":["*.txt"]
+        },
     classifiers=[
         "Programming Language :: Python :: 3",
         "Operating System :: OS Independent",
