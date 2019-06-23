@@ -1,4 +1,5 @@
 import math
+import os
 
 
 def get_magnitude(number):
@@ -14,9 +15,9 @@ def get_name(magnitude_over_3, shorten=False):
 
     filename = ""
     if shorten:
-        filename = "symbols.txt"
+        filename = os.path.join(os.path.dirname(__file__), "symbols.txt")
     else:
-        filename = "words.txt"
+        filename = os.path.join(os.path.dirname(__file__), "words.txt")
 
     names_file = open(filename, "r")
     names_lines = [i.split("\n")[0] for i in names_file.readlines()]
