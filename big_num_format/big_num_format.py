@@ -134,4 +134,4 @@ def format_num(number, shorten=False, precision=0):
         final_number = ", ".join(numbers_list[:-1])
         final_number += " and " + numbers_list[-1]
 
-    return final_number
+    return final_number.split()
