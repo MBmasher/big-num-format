@@ -63,25 +63,25 @@ def get_name(magnitude_over_3, shorten=False):
     if magnitude_over_3 < 11:
         units_name = small_units_names[magnitude_units_digit - 1]
     else:
+        # Use fourth line for the tens digits of the magnitude
+        tens_name = tens_names[magnitude_tens_digit - 1]
+
         # Use third line for the units digits of the magnitude
         if magnitude_units_digit > 0:
             units_name = big_units_names[magnitude_units_digit - 1]
 
-        # Use fourth line for the tens digits of the magnitude
-        tens_name = tens_names[magnitude_tens_digit - 1]
+            if not shorten:
+                # Add exception character to join the two words if needed.
+                exception_char = "".join(
+                    set(big_units_flags[magnitude_units_digit - 1])
+                    & set(tens_flags[magnitude_tens_digit - 1])
+                )
 
-        if not shorten:
-            # Add exception character to join the two words if needed.
-            exception_char = "".join(
-                set(big_units_flags[magnitude_units_digit - 1])
-                & set(tens_flags[magnitude_tens_digit - 1])
-            )
+                # Strange exception case:
+                # "tre" has the "x" flag but uses the character "s"
 
-            # Strange exception case:
-            # "tre" has the "x" flag but uses the character "s"
-
-            if units_name == "tre" and "x" in tens_flags[magnitude_tens_digit - 1]:
-                exception_char = "s"
+                if units_name == "tre" and "x" in tens_flags[magnitude_tens_digit - 1]:
+                    exception_char = "s"
 
     names_file.close()
 
