@@ -53,7 +53,7 @@ def get_name(magnitude_over_3, shorten=False):
             tens_flags.append(tens_append)
 
     magnitude_units_digit = (magnitude_over_3 - 1) % 10
-    magnitude_tens_digit = math.floor((magnitude_over_3-1) / 10)
+    magnitude_tens_digit = math.floor((magnitude_over_3 - 1) / 10)
 
     units_name = ""
     tens_name = ""
@@ -88,23 +88,26 @@ def get_name(magnitude_over_3, shorten=False):
     return units_name + exception_char + tens_name
 
 
-def format_num(number, shorten=False, precision=0):
+def format_num(number, shorten=False, precision=0, decimal_precision=2):
     if abs(number) >= 1e303:
         raise ValueError("Number is bigger than or equal to 1e303.")
 
     negative = number < 0
 
-    number_string = "".join(("{:.0f}".format(number)).split("."))
     numbers_list = []
+    rounded_number_string = "{:.0f}".format(number)
 
-    magnitude = len(number_string)-1
+    magnitude = len(rounded_number_string) - 1
     magnitude_over_3 = math.floor(magnitude / 3)
-    
+
     min_index = 0
     max_index = (magnitude + 1) % 3
 
     if max_index == 0:
         max_index = 3
+
+    decimal_number_string = "{:.{}f}".format(number, decimal_precision + 1)
+    decimal_number_string = "".join(decimal_number_string.split("."))
 
     last_index = 0
     if precision <= 0:
@@ -113,17 +116,34 @@ def format_num(number, shorten=False, precision=0):
         last_index = magnitude_over_3 - precision + 1
 
     last_index = min(max(last_index, 0), magnitude_over_3)
+    decimal_point_index = (magnitude_over_3 - last_index) * 3 + max_index
+    decimal_number_string = (
+        decimal_number_string[:decimal_point_index]
+        + "."
+        + decimal_number_string[decimal_point_index:]
+    )
+
+    decimal_number_string = "{:.{}f}".format(
+        round(float(decimal_number_string), decimal_precision), decimal_precision
+    )
 
     for i in range(magnitude_over_3, last_index - 1, -1):
-        sub_number_string = str(int(number_string[min_index:max_index]))
-
-        number_name = get_name(i, shorten)
-
-        if sub_number_string != "0":
-            numbers_list.append(sub_number_string + " " * (1 - shorten) + number_name)
+        if i == last_index:
+            max_index = len(decimal_number_string)
+        sub_number_string = decimal_number_string[min_index:max_index].strip("0")
 
         min_index = max_index
         max_index += 3
+        if len(sub_number_string) == 0:
+            continue
+
+        if sub_number_string[-1] == ".":
+            sub_number_string = sub_number_string[:-1]
+
+        number_name = get_name(i, shorten)
+
+        if sub_number_string[0] != "0":
+            numbers_list.append(sub_number_string + " " * (1 - shorten) + number_name)
 
     if len(numbers_list) == 1:
         return numbers_list[0]
