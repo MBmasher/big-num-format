@@ -1,6 +1,6 @@
 # CHANGELOG
 
-### 0.2: unknown date
+### 0.2: 24-06-2019
 
 - Bug: Fix characters showing up before number names ([issue #3](https://github.com/MBmasher/big-num-format/issues/3))
 - Bug: Fix decimal points randomly showing up ([issue #4](https://github.com/MBmasher/big-num-format/issues/4))
