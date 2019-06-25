@@ -2,13 +2,6 @@ import math
 import os
 
 
-def get_magnitude(number):
-    if number == 0:
-        return 0
-
-    return math.floor(math.log(abs(number), 10))
-
-
 def get_name(magnitude_over_3, shorten=False):
     if magnitude_over_3 == 0:
         return ""
