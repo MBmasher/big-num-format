@@ -1,5 +1,22 @@
 import math
 import os
+import decimal
+
+
+def round_str(string_num, decimal_points):
+    if len(string_num.split(".")) == 1:
+        return string_num
+
+    if len(string_num.split(".")) <= decimal_points:
+        return string_num
+
+    whole_part, decimal_part = string_num.split(".")
+
+    digits = whole_part + decimal_part
+    if int(decimal_part[decimal_points]) < 5:
+        return string_num[: 2 + len(whole_part) + decimal_points]
+    else:
+        decimal_index = len(whole_part) + decimal_points - 1
 
 
 def get_name(magnitude_over_3, shorten=False):
@@ -82,13 +99,15 @@ def get_name(magnitude_over_3, shorten=False):
 
 
 def format_num(number, shorten=False, precision=0, decimal_precision=2):
-    if abs(number) >= 1e303:
+    decimal_number = decimal.Decimal(number)
+
+    if abs(decimal_number) >= 1e303:
         raise ValueError("Number is bigger than or equal to 1e303.")
 
-    negative = number < 0
+    negative = decimal_number < 0
 
     numbers_list = []
-    rounded_number_string = "{:.0f}".format(number)
+    rounded_number_string = "{:.0f}".format(decimal_number)
 
     magnitude = len(rounded_number_string) - 1
     magnitude_over_3 = math.floor(magnitude / 3)
@@ -99,7 +118,7 @@ def format_num(number, shorten=False, precision=0, decimal_precision=2):
     if max_index == 0:
         max_index = 3
 
-    decimal_number_string = "{:.{}f}".format(number, decimal_precision + 1)
+    decimal_number_string = "{:.{}f}".format(decimal_number, decimal_precision + 1)
     decimal_number_string = "".join(decimal_number_string.split("."))
 
     last_index = 0
@@ -116,9 +135,16 @@ def format_num(number, shorten=False, precision=0, decimal_precision=2):
         + decimal_number_string[decimal_point_index:]
     )
 
+    print(decimal_number_string)
+
     decimal_number_string = "{:.{}f}".format(
-        round(float(decimal_number_string), decimal_precision), decimal_precision
+        decimal.Context(prec=decimal_precision + magnitude).create_decimal(
+            decimal.Decimal(decimal_number_string)
+        ),
+        decimal_precision,
     )
+
+    print(decimal_number_string)
 
     for i in range(magnitude_over_3, last_index - 1, -1):
         if i == last_index:
