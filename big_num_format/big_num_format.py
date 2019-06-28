@@ -133,26 +133,27 @@ def format_num(number, shorten=False, precision=0, decimal_precision=2):
     for i in range(magnitude_over_3, last_index - 1, -1):
         if i == last_index:
             max_index = len(decimal_number_string)
-        sub_number_string = decimal_number_string[min_index:max_index].strip("0")
+        sub_number_string = decimal_number_string[min_index:max_index].lstrip("0")
         
         min_index = max_index
         max_index += 3
-        if len(sub_number_string) == 0:
+        
+        if len(sub_number_string.strip("0")) == 0:
+            continue
+
+        if sub_number_string.strip("0") == ".":
             continue
 
         if sub_number_string[-1] == ".":
             sub_number_string = sub_number_string[:-1]
 
-        if len(sub_number_string) == 0:
-            continue
-        
         number_name = get_name(i, shorten)
 
         if sub_number_string[0] != "0":
             numbers_list.append(sub_number_string + " " * (1 - shorten) + number_name)
 
     if len(numbers_list) == 1:
-        return numbers_list[0]
+        return numbers_list[0].strip()
 
     final_number = ""
     if shorten:
