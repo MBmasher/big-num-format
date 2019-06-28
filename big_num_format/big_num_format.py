@@ -3,22 +3,6 @@ import os
 import decimal
 
 
-def round_str(string_num, decimal_points):
-    if len(string_num.split(".")) == 1:
-        return string_num
-
-    if len(string_num.split(".")) <= decimal_points:
-        return string_num
-
-    whole_part, decimal_part = string_num.split(".")
-
-    digits = whole_part + decimal_part
-    if int(decimal_part[decimal_points]) < 5:
-        return string_num[: 2 + len(whole_part) + decimal_points]
-    else:
-        decimal_index = len(whole_part) + decimal_points - 1
-
-
 def get_name(magnitude_over_3, shorten=False):
     if magnitude_over_3 == 0:
         return ""
@@ -135,7 +119,7 @@ def format_num(number, shorten=False, precision=0, decimal_precision=2):
         + decimal_number_string[decimal_point_index:]
     )
 
-    print(decimal_number_string)
+    print(decimal_number_string) # TODO: get rid of this
 
     decimal_number_string = "{:.{}f}".format(
         decimal.Context(prec=decimal_precision + magnitude).create_decimal(
@@ -144,7 +128,7 @@ def format_num(number, shorten=False, precision=0, decimal_precision=2):
         decimal_precision,
     )
 
-    print(decimal_number_string)
+    print(decimal_number_string) # TODO: get rid of this too
 
     for i in range(magnitude_over_3, last_index - 1, -1):
         if i == last_index:
