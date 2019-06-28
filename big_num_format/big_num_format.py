@@ -134,7 +134,7 @@ def format_num(number, shorten=False, precision=0, decimal_precision=2):
         if i == last_index:
             max_index = len(decimal_number_string)
         sub_number_string = decimal_number_string[min_index:max_index].strip("0")
-
+        
         min_index = max_index
         max_index += 3
         if len(sub_number_string) == 0:
@@ -143,6 +143,9 @@ def format_num(number, shorten=False, precision=0, decimal_precision=2):
         if sub_number_string[-1] == ".":
             sub_number_string = sub_number_string[:-1]
 
+        if len(sub_number_string) == 0:
+            continue
+        
         number_name = get_name(i, shorten)
 
         if sub_number_string[0] != "0":
