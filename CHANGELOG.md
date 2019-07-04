@@ -1,9 +1,13 @@
 # CHANGELOG
 
-### next-ver: unknown date
+### 0.3: 04-07-2019
 
-- Minor: Remove redundant function get_magnitude() ([issue #11](https://github.com/MBmasher/big-num-format/issues/11))
+- Bug: Fix string index error appearing sometimes ([issue #8](https://github.com/MBmasher/big-num-format/issues/8))
+- Bug: Only strip trailing zeroes and not leading zeroes when formatting numbers.
+- Bug: Fix bug with magnitude showing incorrect values ([issue #12](https://github.com/MBmasher/big-num-format/issues/12))
 - Enhancement: Allow format_num() to be able to take strings, and convert the input into a Decimal class ([issue #10](https://github.com/MBmasher/big-num-format/issues/10))
+- Minor: Remove redundant function get_magnitude() ([issue #11](https://github.com/MBmasher/big-num-format/issues/11))
+- Minor: Remove leading whitespace when only one number is returned
 
 ### 0.2: 24-06-2019
 
