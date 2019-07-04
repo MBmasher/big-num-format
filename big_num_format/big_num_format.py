@@ -65,6 +65,7 @@ def get_name(magnitude_over_3, shorten=False):
             units_name = big_units_names[magnitude_units_digit - 1]
 
             if not shorten:
+
                 # Add exception character to join the two words if needed.
                 exception_char = "".join(
                     set(big_units_flags[magnitude_units_digit - 1])
@@ -88,29 +89,35 @@ def format_num(number, shorten=False, precision=0, decimal_precision=2):
     if abs(decimal_number) >= 1e303:
         raise ValueError("Number is bigger than or equal to 1e303.")
 
-    negative = decimal_number < 0
-
     numbers_list = []
     rounded_number_string = "{:.0f}".format(decimal_number)
 
+    # Get the magnitude of the string
+    # by rounding it off to the nearest
+    # whole number and finding the length.
     magnitude = len(rounded_number_string) - 1
     magnitude_over_3 = math.floor(magnitude / 3)
 
-    min_index = 0
     max_index = (magnitude + 1) % 3
 
     if max_index == 0:
         max_index = 3
 
+    # Round the decimal to amount of points:
+    # decimal_precision + 1
+    # The +1 is so that further rounding can be done.
     decimal_number_string = "{:.{}f}".format(decimal_number, decimal_precision + 1)
     decimal_number_string = "".join(decimal_number_string.split("."))
 
+    # If precision is negative, count last_index from right
+    # If precision is positive, count last_index from left
     last_index = 0
     if precision <= 0:
         last_index = -precision
     else:
         last_index = magnitude_over_3 - precision + 1
 
+    # This code rounds off the last decimal place of the string.
     last_index = min(max(last_index, 0), magnitude_over_3)
     decimal_point_index = (magnitude_over_3 - last_index) * 3 + max_index
     decimal_number_string = (
@@ -119,8 +126,6 @@ def format_num(number, shorten=False, precision=0, decimal_precision=2):
         + decimal_number_string[decimal_point_index:]
     )
 
-    print(decimal_number_string) # TODO: get rid of this
-
     decimal_number_string = "{:.{}f}".format(
         decimal.Context(prec=decimal_precision + magnitude).create_decimal(
             decimal.Decimal(decimal_number_string)
@@ -128,16 +133,41 @@ def format_num(number, shorten=False, precision=0, decimal_precision=2):
         decimal_precision,
     )
 
-    print(decimal_number_string) # TODO: get rid of this too
+    # Check the magnitude again as it may have changed
+    old_magnitude = last_index
+    magnitude = len(decimal_number_string.split(".")[0]) - 1
+    magnitude += 3 * old_magnitude
+    magnitude_over_3 = math.floor(magnitude / 3)
+
+    min_index = 0
+    max_index = (magnitude + 1) % 3
+
+    if max_index == 0:
+        max_index = 3
+
+    last_index = 0
+    if precision <= 0:
+        last_index = -precision
+    else:
+        last_index = magnitude_over_3 - precision + 1
 
     for i in range(magnitude_over_3, last_index - 1, -1):
         if i == last_index:
             max_index = len(decimal_number_string)
         sub_number_string = decimal_number_string[min_index:max_index].lstrip("0")
         
+        # Remove trailing zeroes from the decimal place.
+        if len(sub_number_string.split(".")) > 1:
+            sub_number_string = ".".join(
+                [
+                    sub_number_string.split(".")[0],
+                    sub_number_string.split(".")[1].rstrip("0"),
+                ]
+            )
+
         min_index = max_index
         max_index += 3
-        
+
         if len(sub_number_string.strip("0")) == 0:
             continue
 
@@ -152,9 +182,13 @@ def format_num(number, shorten=False, precision=0, decimal_precision=2):
         if sub_number_string[0] != "0":
             numbers_list.append(sub_number_string + " " * (1 - shorten) + number_name)
 
+    if len(numbers_list) == 0:
+        return ""
+
     if len(numbers_list) == 1:
         return numbers_list[0].strip()
 
+    # Finally, joining the number name list and returning a value.
     final_number = ""
     if shorten:
         final_number = " ".join(numbers_list)
