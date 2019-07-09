@@ -22,20 +22,24 @@ def get_name(magnitude_over_3, shorten=False):
     small_units_names = names_lines[1].split(",")
     big_units_names = [i.split("_")[0] for i in names_lines[2].split(",")]
     tens_names = [i.split("_")[0] for i in names_lines[3].split(",")]
+    hundreds_names = [i.split("_")[0] for i in names_lines[4].split(",")]
 
     if not shorten:
         big_units_flags = []
         tens_flags = []
+        hundreds_flags = []
 
-        for big_units, tens in [
-            (names_lines[2].split(",")[i], names_lines[3].split(",")[i])
+        for big_units, tens, hundreds in [
+            [line.split(",")[i] for line in names_lines[2:5]]
             for i in range(9)
         ]:
             big_units_append = ""
             tens_append = ""
+            hundreds_append = ""
 
             big_units_split = big_units.split("_")
             tens_split = tens.split("_")
+            hundreds_split = hundreds.split("_")
 
             if len(big_units_split) > 1:
                 big_units_append = big_units_split[1]
@@ -43,14 +47,20 @@ def get_name(magnitude_over_3, shorten=False):
             if len(tens_split) > 1:
                 tens_append = tens_split[1]
 
+            if len(hundreds_split) > 1:
+                hundreds_append = hundreds_split[1]
+
             big_units_flags.append(big_units_append)
             tens_flags.append(tens_append)
+            hundreds_flags.append(hundreds_append)
 
     magnitude_units_digit = (magnitude_over_3 - 1) % 10
-    magnitude_tens_digit = math.floor((magnitude_over_3 - 1) / 10)
+    magnitude_tens_digit = math.floor((magnitude_over_3 - 1) / 10) % 10
+    magnitude_hundreds_digit = math.floor((magnitude_over_3 - 1) / 100) % 100
 
     units_name = ""
     tens_name = ""
+    hundreds_name = ""
     exception_char = ""
 
     # Use second line of names file when magnitude is under 11
@@ -58,36 +68,50 @@ def get_name(magnitude_over_3, shorten=False):
         units_name = small_units_names[magnitude_units_digit - 1]
     else:
         # Use fourth line for the tens digits of the magnitude
-        tens_name = tens_names[magnitude_tens_digit - 1]
+        if magnitude_tens_digit != 0:
+            tens_name = tens_names[magnitude_tens_digit - 1]
+
+        # Use fifth line for the hundreds digits of the magnitude
+        if magnitude_hundreds_digit != 0:
+            hundreds_name = hundreds_names[magnitude_hundreds_digit - 1]
 
         # Use third line for the units digits of the magnitude
         if magnitude_units_digit > 0:
             units_name = big_units_names[magnitude_units_digit - 1]
 
             if not shorten:
+                if tens_name:
+                    exception_flags = tens_flags
+                    exception_digit = magnitude_tens_digit
+                else:
+                    exception_flags = hundreds_flags
+                    exception_digit = magnitude_hundreds_digit
 
                 # Add exception character to join the two words if needed.
                 exception_char = "".join(
                     set(big_units_flags[magnitude_units_digit - 1])
-                    & set(tens_flags[magnitude_tens_digit - 1])
+                    & set(exception_flags[exception_digit - 1])
                 )
 
                 # Strange exception case:
                 # "tre" has the "x" flag but uses the character "s"
 
-                if units_name == "tre" and "x" in tens_flags[magnitude_tens_digit - 1]:
+                if units_name == "tre" and "x" in tens_flags[magnitude_hundreds_digit - 1]:
                     exception_char = "s"
 
     names_file.close()
 
-    combined_stems = units_name + exception_char + tens_name
-    return combined_stems[:-1] + "illion"
+    final_name = units_name + exception_char + tens_name + hundreds_name
+    if not shorten:
+        final_name = final_name[:-1] + "illion"
+
+    return final_name
 
 
 def format_num(number, shorten=False, precision=0, decimal_precision=2):
     decimal_number = decimal.Decimal(number)
 
-    if abs(decimal_number) >= 1e303:
+    if abs(decimal_number) >= 1e3003:
         raise ValueError("Number is bigger than or equal to 1e303.")
 
     numbers_list = []

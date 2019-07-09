@@ -2,3 +2,4 @@ thousand
 mi,bi,tri,quadri,quinti,sexti,septi,octi,noni,deci
 un,duo,tre_s,quattuor,quinqua,se_sx,septe_mn,octo,nove_mn
 deci_n,viginti_ms,triginta_ns,quadraginta_ns,quinquaginta_ns,sexaginta_n,septuaginta_n,octoginta_mx,nonaginta
+centi_nx,ducenti_n,trecenti_ns,quadringenti_ns,quingenti_ns,sescenti_n,septingenti_n,octingenti_mx,nongenti
