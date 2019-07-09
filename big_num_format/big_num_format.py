@@ -80,7 +80,8 @@ def get_name(magnitude_over_3, shorten=False):
 
     names_file.close()
 
-    return units_name + exception_char + tens_name
+    combined_stems = units_name + exception_char + tens_name
+    return combined_stems[:-1] + "illion"
 
 
 def format_num(number, shorten=False, precision=0, decimal_precision=2):
