@@ -1,5 +1,10 @@
 # CHANGELOG
 
+### 0.4: 09-07-2019
+
+- Enhancement: Add support for numbers in-between 1e303 and 1e3003 ([issue #6](https://github.com/MBmasher/big-num-format/issues/6))
+	- Enhancement: Change structure of words.txt
+
 ### 0.3: 04-07-2019
 
 - Bug: Fix string index error appearing sometimes ([issue #8](https://github.com/MBmasher/big-num-format/issues/8))
