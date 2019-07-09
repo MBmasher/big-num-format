@@ -30,8 +30,7 @@ def get_name(magnitude_over_3, shorten=False):
         hundreds_flags = []
 
         for big_units, tens, hundreds in [
-            [line.split(",")[i] for line in names_lines[2:5]]
-            for i in range(9)
+            [line.split(",")[i] for line in names_lines[2:5]] for i in range(9)
         ]:
             big_units_append = ""
             tens_append = ""
@@ -96,7 +95,10 @@ def get_name(magnitude_over_3, shorten=False):
                 # Strange exception case:
                 # "tre" has the "x" flag but uses the character "s"
 
-                if units_name == "tre" and "x" in tens_flags[magnitude_hundreds_digit - 1]:
+                if (
+                    units_name == "tre"
+                    and "x" in tens_flags[magnitude_hundreds_digit - 1]
+                ):
                     exception_char = "s"
 
     names_file.close()
@@ -180,7 +182,7 @@ def format_num(number, shorten=False, precision=0, decimal_precision=2):
         if i == last_index:
             max_index = len(decimal_number_string)
         sub_number_string = decimal_number_string[min_index:max_index].lstrip("0")
-        
+
         # Remove trailing zeroes from the decimal place.
         if len(sub_number_string.split(".")) > 1:
             sub_number_string = ".".join(
